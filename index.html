@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperGHM | Coastal Resilience 2026</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-branding">
+            <img src="favicon.png" alt="SuperGHM Logo" class="header-logo">
+            <h1>SuperGHM <span class="subtitle">Imperial-Dhaka Collaboration</span></h1>
+        </div>
+        <nav class="tab-wrapper">
+            <button class="tab-link active" onclick="openTab(event, 'Map')">Strategic Tracker</button>
+            <button class="tab-link" onclick="openTab(event, 'Mission')">Our Mission</button>
+            <button class="tab-link" onclick="openTab(event, 'Tech')">Innovation Portfolio</button>
+            <button class="tab-link" onclick="openTab(event, 'TimelineTab')">Timeline</button>
+            <button class="tab-link" onclick="openTab(event, 'Finance')">Finances</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="Map" class="tab-content active">
+            <div class="map-layout-container">
+                <div class="map-box">
+                    <div id="map"></div>
+                    <div class="map-overlay-compact">
+                        <label style="font-size: 0.7rem; font-weight: bold; color: #334155;">DEPLOYMENT TYPE</label>
+                        <select id="pinType">
+                            <option value="tech">Desalination/Farming</option>
+                            <option value="expert">Health Experts</option>
+                            <option value="edu">Education Sessions</option>
+                        </select>
+                        <div class="tool-row">
+                            <button onclick="startHeatmap()" class="btn-mini accent">Draw Zone</button>
+                            <button onclick="exportData()" class="btn-mini">Export</button>
+                        </div>
+                        <button onclick="document.getElementById('importFile').click()" class="btn-mini">Import JSON</button>
+                        <button onclick="clearAllData()" class="btn-mini danger">Clear All Data</button>
+                        <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+                    </div>
+                </div>
+                <div class="pin-registry-compact">
+                    <h4>Deployment Registry</h4>
+                    <ul id="pin-list"></ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="Mission" class="tab-content">
+            <div class="info-section">
+                <h2>The Coastal Life-Line Project</h2>
+                <div class="grid-2">
+                    <div>
+                        <p><strong>Background:</strong> South-Western Bangladesh (Satkhira/Khulna) faces a 10x global average sea level rise. 60% of drinking water is contaminated by salinity, causing gestational hypertension and stunting.</p>
+                        <p><strong>The Mission:</strong> Addressing the "Salt-Nutritional Crisis" by implementing decentralized water and food security solutions that use local materials and knowledge.</p>
+                    </div>
+                    <div class="root-cause-chain">
+                        <div class="chain-item"><strong>1. Salinity Intrusion:</strong> Forces freshwater scarcity.</div>
+                        <div class="chain-item"><strong>2. Agri-Transition:</strong> Rice paddies to shrimp ponds.</div>
+                        <div class="chain-item"><strong>3. Dietary Gaps:</strong> Loss of Potassium ($K^+$) rich greens.</div>
+                        <div class="chain-item"><strong>4. Health Outcome:</strong> 31.8% Gestational Hypertension.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="Tech" class="tab-content">
+            <div class="tech-grid-detailed">
+                <div class="featured-card">
+                    <div class="badge-new">NEW PROTOTYPE: BIOMIMETIC</div>
+                    <h3>CocoShield™ Seed Encapsulation</h3>
+                    <div class="tech-card-inner">
+                        <div class="tech-desc">
+                            <p>A coconut-inspired multi-layer capsule (Pectin + Potassium Alginate) that buffers seed hydration during saline germination. Enables the growth of Okra and Amaranth in high-salt soil.</p>
+                        </div>
+                        <div class="tech-stats">
+                            <p><strong>Impact:</strong> Restore $K^+$ and $Fe$ levels in diet.</p>
+                            <p><strong>Scale:</strong> Local bazaar materials.</p>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="dropdown">
+                    <button class="drop-btn" onclick="toggleAcc('mar-info')">Community Pond MAR (Sand-Ring Filter) ▾</button>
+                    <div id="mar-info" class="drop-content">
+                        <div class="tech-card-inner">
+                            <div class="tech-desc">
+                                <p>Uses gravity to inject filtered monsoon rain into salty aquifers, creating a "Freshwater Bubble" for irrigation and drinking.</p>
+                            </div>
+                            <div class="tech-stats">
+                                <p><strong>Cost:</strong> ~$150 USD</p>
+                                <p><strong>Maintenance:</strong> Annual DIY Back-wash.</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="drop-btn" onclick="toggleAcc('crispr-info')">CRISPR SDN-1 Rice (OsNAC113 Knockout) ▾</button>
+                    <div id="crispr-info" class="drop-content">
+                        <p>Genetic knockout strategy to disable "biological brakes" in rice, allowing crop survival in high salinity while biofortifying grains with Zinc and Iron.</p>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="drop-btn" onclick="toggleAcc('sro-info')">Solar Reverse Osmosis (sRO) ▾</button>
+                    <div id="sro-info" class="drop-content">
+                        <p>High-pressure desalination powered by solar PV arrays. Ideal for community-level water points in "Aalo" Clinics.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="TimelineTab" class="tab-content">
+            <div class="info-section">
+                <h2>24-Month Roadmap</h2>
+                <table class="timeline-table" style="width: 100%; border-collapse: collapse;">
+                    <tr style="border-bottom: 1px solid #eee"><td style="padding:12px"><strong>M1-6</strong></td><td>Geological mapping, Lab testing (Dhaka Univ), and "Nutrition Apa" recruitment.</td></tr>
+                    <tr style="border-bottom: 1px solid #eee"><td style="padding:12px"><strong>M7-12</strong></td><td>Pilot 500 CocoShield kits and 20 Community MAR units.</td></tr>
+                    <tr style="border-bottom: 1px solid #eee"><td style="padding:12px"><strong>M13-18</strong></td><td>Scale-up: Deployment of sRO units at clinics and CRISPR field trials.</td></tr>
+                    <tr style="border-bottom: 1px solid #eee"><td style="padding:12px"><strong>M19-24</strong></td><td>Impact evaluation (Maternal Blood Pressure/Iron) & Government handoff.</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="Finance" class="tab-content">
+            <div class="info-section">
+                <h2>Strategic Spending (600M BDT)</h2>
+                <div class="budget-grid">
+                    <div class="budget-item"><strong>40%</strong> Infrastructure (RO & MAR)</div>
+                    <div class="budget-item"><strong>20%</strong> Seed & CRISPR R&D</div>
+                    <div class="budget-item"><strong>20%</strong> Health Workforce (Training)</div>
+                    <div class="budget-item"><strong>20%</strong> Ops, Logistics & Ethics</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
